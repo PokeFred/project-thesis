@@ -30,7 +30,7 @@ export default class Canvas {
     private slots: Konva.Path[];
     private pieces: Konva.Image[];
     private puzzlePieceContainer: PuzzlePieceContainer;
-    private exitButton: ExitButton;
+    // private exitButton: ExitButton;
     
     constructor(puzzleController: PuzzleController, container: HTMLDivElement, background: HTMLImageElement, slotGroups: SlotGroup[]) {
         this.puzzleController = puzzleController;
@@ -63,7 +63,7 @@ export default class Canvas {
         this.slots = new Array<Konva.Path>();
         this.pieces = new Array<Konva.Image>();
         this.puzzlePieceContainer = new PuzzlePieceContainer(this);
-        this.exitButton = new ExitButton(this.HudLayer, this.puzzleController.exitFullscreen.bind(this.puzzleController));
+        // this.exitButton = new ExitButton(this.HudLayer, this.puzzleController.exitFullscreen.bind(this.puzzleController));
 
         this.fitStageIntoContainer();
         this.init(background, slotGroups);        
@@ -92,9 +92,10 @@ export default class Canvas {
     }
 
     private createSlot(path: string): Konva.Path {
+        const COLOR = getComputedStyle(this.container).getPropertyValue("--color-primary").trim();
         return new Konva.Path({
             data: path,
-            fill: "black",
+            fill: COLOR,
             strokeEnabled: false,
             hitStrokeWidth: 0,
             scale: {x: this.scale, y: this.scale}
@@ -157,7 +158,7 @@ export default class Canvas {
 
     private drawHUD(): void {
         this.puzzlePieceContainer.draw();
-        this.exitButton.draw();
+        // this.exitButton.draw();
     }
 
     public drawAll(): void {
@@ -201,10 +202,15 @@ class PuzzlePieceContainer {
             dragBoundFunc(pos: Vector2d) {
                 const LEFT_BOUND = 0
                 const RIGHT_BOUND = this.getStage()!.width();
-                if(pos.x <= LEFT_BOUND && pos.x + this.width() >= RIGHT_BOUND) {
-                    return {x: pos.x, y: this.y()}
+                if(pos.x > LEFT_BOUND) {
+                    return { x: LEFT_BOUND, y: this.y() }
                 }
-                return {x: this.x(), y: this.y()}
+                else if(pos.x + this.width() < RIGHT_BOUND) {
+                    return { x: RIGHT_BOUND - this.width(), y: this.y() }
+                }
+                else {
+                    return { x: pos.x, y: this.y() }
+                }
             },
         });
         this.slotMapping = new Map<Konva.Image, Konva.Group>();
@@ -248,22 +254,24 @@ class PuzzlePieceContainer {
         );
     }
 
-    // TODO: FIX
     private drawPieces(): void {
         let currentX = this.gap;
 
-        // const mixedPieces: Konva.Image[] = this.canvas.Pieces.sort(() => Math.random() - 0.5);
-
-        // mixedPieces.forEach((piece: Konva.Image, i: number) => {
+        const CONTAINERS: Konva.Group[] = new Array<Konva.Group>();
         this.canvas.Pieces.forEach((piece: Konva.Image, i: number) => {
             const CONTAINER = this.createPuzzlePieceContainerSlot();
+            CONTAINERS.push(CONTAINER);
             this.slotMapping.set(piece, CONTAINER);
-            CONTAINER.x(currentX);
-            this.container.add(CONTAINER);
-            currentX += this.gap + CONTAINER.width();
 
             this.placePieceIntoContainer(piece);
         });
+
+        const CONTAINERS_MIXED: Konva.Group[] = CONTAINERS.sort(() => Math.random() - 0.5);
+        CONTAINERS_MIXED.forEach((container: Konva.Group) => {
+            this.container.add(container);
+            container.x(currentX);
+            currentX += this.gap + container.width();
+        })
     }
 
     public draw(): void {

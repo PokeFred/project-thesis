@@ -8,9 +8,8 @@ type GameState = {
 }
 
 type PuzzleState = {
-    identifier: string,
+    id: number,
     score: number,
-    state: string,
     data: any
 }
 
@@ -76,18 +75,35 @@ export function startGame(): void {
     localStorage.setItem("game", JSON.stringify(newState))
 }
 
-export function resetGame(): void {
+export function restartGame(): void {
+    stopGame()
+    startGame()
+}
+
+export function stopGame(): void {
     newState = { isRunning: false, score: 0, puzzles: [] }
     localStorage.setItem("game", JSON.stringify(newState))
 }
 
 export function isRunning(): boolean {
-    console.log(newState)
     return newState.isRunning
 }
 
 export function getScore(): number {
     return newState.score
+}
+
+export function getPuzzle(id: number): PuzzleState {
+    return newState.puzzles
+        .filter((element: PuzzleState): boolean => element.id === id)
+        [0]
+}
+
+export function getPuzzleScore(id: number): number {
+    const arr: PuzzleState[] = newState.puzzles
+        .filter((element: PuzzleState): boolean => element.id === id)
+
+    return (arr.length > 0) ? arr[0].score : 0
 }
 
 //function getCompletion(): number {}

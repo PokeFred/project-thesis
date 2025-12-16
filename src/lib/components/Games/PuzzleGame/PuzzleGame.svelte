@@ -1,31 +1,20 @@
 <script lang="ts">
     import { onMount } from "svelte";
-    import type Puzzle from "./Puzzle.svelte";
     import PuzzleController, { type CutoutData, type PuzzleData, type SlotGroup } from "./PuzzleController.svelte";
+    import type { GameInput } from ".";
+    import { Icon } from "svelte-awesome";
+    import { faAngleLeft, faAngleRight } from "@fortawesome/free-solid-svg-icons";
 
-    let { quiz }: { quiz: Puzzle } = $props();    
+    const { gameInput }: { gameInput: GameInput } = $props();   
 
-    async function loadImage(src: string): Promise<HTMLImageElement> {
-        return new Promise((resolve, reject) => {
-            const img = new Image();
-            img.src = src;
-            img.onload = () => resolve(img);
-            img.onerror = reject;
-        });
-    }
-
-    let container: HTMLDivElement;
+    const path: string = gameInput.path;
     
+    let container: HTMLDivElement;
     let puzzleController: PuzzleController;
     onMount(async ()=>{
-        // TODO: Auslagern in Quiz.ts
-        const path = "/station_01/raetsel_02/game";
-        const backgroundSrc = "Anziehbild.png";
-        // const path = "/station_04/raetsel_00/game";
-        // const backgroundSrc = "Hintergrund.png";
-        const puzzleData: PuzzleData = await (await fetch(`${path}/cutouts.json`)).json();
 
-        const background: HTMLImageElement = await loadImage(path + "/" + backgroundSrc);
+        const puzzleData: PuzzleData = await (await fetch(`${path}/cutouts.json`)).json();
+        const background: HTMLImageElement = await loadImage(path + "/Background.png");
         const slotGroups: SlotGroup[] = await Promise.all(puzzleData.cutouts.map(async (cutout: CutoutData) => {
             const piece = await loadImage(path + "/" + cutout.src);
             const noise = cutout.noise ? await Promise.all( 
@@ -38,11 +27,30 @@
                 noise: noise
             } satisfies SlotGroup;
         }));
-        // TODO
-        
+
         puzzleController = new PuzzleController(container, background, slotGroups);
     });
+
+
+    async function loadImage(src: string): Promise<HTMLImageElement> {
+        return new Promise((resolve, reject) => {
+            const img = new Image();
+            img.src = src;
+            img.onload = () => resolve(img);
+            img.onerror = reject;
+        });
+    }
+
+    export const getSubmitData = () => puzzleController.Puzzle.complete();
+    export const getSubmitScore = () => puzzleController.Puzzle.score();
 </script>
 
 <!-- <div bind:this={container} class="fixed top-0 left-0 w-full h-full"></div> -->
-<div bind:this={container} class="w-full h-[80dvh]"></div>
+<div class="-m-4">
+    <div bind:this={container} class="w-full h-[80vh]"></div>
+</div>
+
+<div class="flex justify-between py-20 border-b-2">
+    <button><Icon data={faAngleLeft} scale={2}/></button>
+    <button><Icon data={faAngleRight} scale={2}/></button>
+</div>

@@ -152,7 +152,7 @@ export default {
                     identifier: "station_01_puzzle_00",
                     name: "Station freischalten",
                     requirements: [],
-                    score: 2,
+                    score: 1,
                     data: {
                         introduction: {
                             text: "Begebe dich zum Alten Markt, um diese Station freizuschalten",
@@ -171,16 +171,27 @@ export default {
                     }
                 },
                 {
-                    type: "multi-select-puzzle",
+                    type: "multiple-choice-puzzle",
                     identifier: "station_01_puzzle_01",
                     name: "Rätsel 1",
                     requirements: ["station_01_puzzle_00"],
                     score: 2,
                     data: {
                         introduction: {
-                            text: "MultiSelectPuzzle"
+                            text: ["Was kennzeichnete den Markt in Dortmund im Mittelalter? Nur fünf von acht Antwortmöglichkeiten sind richtig - überlege genau!"]
                         },
-                        game: {},
+                        game: {
+                            answers: [
+                                { text: "Es gab einen Brunnen am Markt.", isCorrect: true },
+                                { text: "Die Hauptpfarrkirche lag am Marktplatz.", isCorrect: true },
+                                { text: "Der Markt war das Zentrum der Stadt.", isCorrect: true },
+                                { text: "Hinrichtungen von Verurteilten fanden auf dem Markt statt.", isCorrect: false },
+                                { text: "Der Markt lag an einem wichtigen Handelsweg.", isCorrect: true },
+                                { text: "Zutritt hatten nur Angehörige des Adels.", isCorrect: false },
+                                { text: "Das Rathaus lag direkt am Marktplatz.", isCorrect: true },
+                                { text: "Eine zweite Stadtmauer umgab den Markt.", isCorrect: false }
+                            ]
+                        },
                         result: {}
                     }
                 },
@@ -192,7 +203,7 @@ export default {
                     score: 2,
                     data: {
                         introduction: {
-                            text: "DoubleSelectPuzzle"
+                            text: ["Ordne den Zünften das richtige Handwerk zu. Aber Achtung: es gibt nur sieben richtige Paare! Es wurden drei Zünfte dazu gemischt. Schaffst Du es, die richtigen Paare zu finden?", "Zünfte: Schmied, Fleischer, Bäcker, Bader, Tuchmacher, Gerber, Schuhmacher, Krämer, Fettkrämer, Abdecker", "Handwerk: Metallverarbeitung, Getreideverarbeitung, Fleischverarbeitung, Lederverarbeitung, Feinlederverarbeitung, Gemischtwarenhandel, Handel mit Butter, Öl, Speck etc."]
                         },
                         game: {
                             data: {
@@ -212,22 +223,20 @@ export default {
                         result: {}
                     }
                 },
-                /*
                 {
-                    type: "double-select-puzzle",
+                    type: "text-select-puzzle",
                     identifier: "station_01_puzzle_09",
                     name: "Rätsel 9",
                     requirements: ["station_01_puzzle_00"],
                     score: 2,
                     data: {
                         introduction: {
-                            text: "Hello World"
+                            text: ["Das Warenhaus Althoff war mit seinen 5000 m² Verkaufsfläche und etwa 500 Mitarbeitenden das größte Warenhaus außerhalb Berlins.", "Wenn Du mehr über die Innenausstattung und die im Kaufhaus angebotenen Waren erfahren möchtest, löse den folgenden Lückentext. Jeweils ein Begriff ist der richtige und muss in die freie Lücke eingesetzt werden."]
                         },
                         game: {},
                         result: {}
                     }
                 }
-                */
             ]
         },
         {
@@ -235,7 +244,7 @@ export default {
             tag: "Station 02",
             stitle: "Westen- und Ostenhellweg",
             title: "Der Westen- und Ostenhellweg",
-            score: 2,
+            score: 1,
             chapters: [
                 {
                     title: "Kapitel 1: Der Hellweg - vom Handelsweg zur Einkaufsmeile",
@@ -271,7 +280,7 @@ export default {
                     identifier: "station_02_puzzle_00",
                     name: "Station freischalten",
                     requirements: [],
-                    score: 2,
+                    score: 1,
                     data: {
                         introduction: {
                             text: "Begebe dich zum Westen- und Ostenhellweg, um diese Station freizuschalten",

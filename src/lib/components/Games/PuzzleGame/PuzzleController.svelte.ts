@@ -55,9 +55,9 @@ export default class PuzzleController {
 
     public get Puzzle() { return this.puzzle; }
 
-    public exitFullscreen(): void {
-        this.canvas.Fullscreen.disable();
-    }
+    // public exitFullscreen(): void {
+    //     this.canvas.Fullscreen.disable();
+    // }
 
     public dragStartPiece(event: KonvaEventObject<DragEvent>): void {
         const KONVA_PIECE: Konva.Image | undefined = (event.target as Konva.Image);
@@ -75,11 +75,17 @@ export default class PuzzleController {
         const PIECE: Piece | undefined = this.pieceMap.get(piece);
         const SLOT: Slot | undefined = PIECE?.Slot;
 
-        const KONVA_SLOT = this.slotMap.get(SLOT!);
+        const KONVA_SLOT = this.slotMap.get(SLOT!)!;
+
+        const RECT_PIECE = piece.getSelfRect();
+        const RECT_SLOT = KONVA_SLOT?.getSelfRect();
+
+        const SCALE_X_NORMALIZED: number = RECT_SLOT.width / RECT_PIECE.width;
+        const SCALE_Y_NORMALIZED: number = RECT_SLOT.height / RECT_PIECE.height;
 
         PIECE?.removeFromSlot();
 
-        piece.scale(KONVA_SLOT?.scale());
+        piece.scale({ x: SCALE_X_NORMALIZED * KONVA_SLOT.scaleX(), y: SCALE_Y_NORMALIZED * KONVA_SLOT.scaleY() });
         KONVA_SLOT?.show();
     }
 
@@ -110,7 +116,6 @@ export default class PuzzleController {
         PIECE?.placeInSlot();
 
         piece.setAbsolutePosition({x: SLOT_BOX.x, y: SLOT_BOX.y});
-        piece.scale(SLOT.scale());
         SLOT?.hide();
     }
 

@@ -1,5 +1,6 @@
-import { POINTS, QuizState } from "$lib/State.svelte"
-import { Quiz } from "../Quiz"
+// import type { GameOutput } from "$components/puzzle/multipleChoice";
+import type { GameOutput } from ".";
+import { type Quiz, POINTS } from "../Quiz"
 import type { SlotGroup } from "./PuzzleController.svelte";
 
 export class Slot {
@@ -40,14 +41,11 @@ export class Piece {
     }
 }
 
-export default class Puzzle extends Quiz {
+export default class Puzzle implements Quiz {
     private slots: Slot[];
     private pieces: Piece[];
 
-    // constructor(quizState: QuizState, slotGroups: SlotGroup[]) {
     constructor(slotGroups: SlotGroup[]) {
-        // TODO: QuizState?
-        super(new QuizState());
         this.slots = new Array<Slot>();
         this.pieces = new Array<Piece>();
         slotGroups.forEach((slotGroup: SlotGroup) => {
@@ -66,31 +64,19 @@ export default class Puzzle extends Quiz {
     public get Slots() { return this.slots; }
     public get Pieces() { return this.pieces; }
 
-    public get AnswersCorrect() { 
-        if(this.slots.length <= 0) {
-            return 0;
+    public score(): number {
+        return this.slots.reduce((sum: number, slot: Slot) => {
+            return sum + (slot.Selected?.Correct ? POINTS.ANSWER_CORRECT : POINTS.ANSWER_FALSE);
+        }, 0);
+    }
+
+    public complete(): GameOutput {
+        const placed: any[] = this.slots.map((slot: Slot) => {
+            return slot.Selected
+        })
+
+        return {
+            placed: placed.map((e: any): any => JSON.stringify(e))
         }
-        return this.slots.reduce((sum, slot: Slot) => {
-            if(slot.Selected && slot.Selected.Correct) {
-                return ++sum;
-            }
-            return sum;
-        }, 0)
-    }
-
-    public reset(): void {
-        this.slots.forEach((slot: Slot) => {
-            slot.Selected = undefined;
-        });
-    }
-
-    public complete(): void {
-        let sum: number = 0;
-        this.slots.forEach((slot: Slot)=>{
-            if(slot.Selected) {
-                sum += slot.Selected.Correct ? POINTS.ANSWER_CORRECT : POINTS.ANSWER_FALSE;
-            }
-        });
-        super.QuizState.complete(sum);
     }
 }

@@ -2,19 +2,27 @@
     import { Icon } from "svelte-awesome";
     import { faXmark } from "@fortawesome/free-solid-svg-icons";
     import ShowMore from "$components/ShowMore.svelte";
-    import MultipleChoice, { type Answer, type Description } from "./MultipleChoice";
+    import MultipleChoice, { type Answer } from "./MultipleChoice";
     import Fullscreen from "$components/Fullscreen.svelte";
+    import type { GameOutput, Result } from ".";
+    import type { Content, Inline } from "../Content";
+    import { POINTS } from "../Quiz";
 
-    let { quiz }: { quiz: MultipleChoice } = $props();
+    let { result }: { result: Result } = $props();
+    console.log(result)
 
-    const toggles: (()=>{})[] = new Array(quiz.Options.length);
 
-    const multipleChoiceResult = quiz.Options.map((answer: Answer, i: number) => {
+    const toggles: (()=>void)[] = new Array(result.answers.length);
+
+    const multipleChoiceResult = result.answers.map((obj, i: number) => {
         return {
-            answer: answer.answer,
-            correct: answer.correct,
-            selected: quiz.Selected[i],
-            description: quiz.Descriptions[i]
+            answer: obj.answer.answer,
+            correct: obj.answer.correct,
+            selected: obj.selected,
+            description: [{
+                tag: "p",
+                children: [{tag: "text", text: "Aus config laden."} as Inline]
+            } as Content]
         }
     });;    
 </script>
@@ -24,7 +32,10 @@
         <div>
             <div class="flex w-full mt-[25px] mb-[10px]">
                 <div class="grow-0 shrink-0 w-[32px] h-[32px] ml-[9px] mr-[19px] rounded-full border-2 border-secondary {result.selected ? "bg-secondary" : "bg-inherit"}"></div>
-                <div class="flex items-center w-full pl-4 font-bold text-[16px] text-primary bg-secondary rounded-full">Du hast {result.correct == result.selected ? "RICHTIG" : "FALSCH"} getippt</div>
+                <div class="flex items-center justify-between w-full -mr-4 pl-4 pr-8 font-bold text-[16px] text-primary bg-secondary rounded-l-full">
+                    <span>Du hast {result.correct == result.selected ? "RICHTIG" : "FALSCH"} getippt</span>
+                    <span>{result.selected == result.correct ? POINTS.ANSWER_CORRECT : 0}/{POINTS.ANSWER_CORRECT}</span>
+                </div>
             </div>
             <div class="ml-[66px] font-bold text-[18px]">
                 <span>{result.answer}</span>
@@ -32,7 +43,11 @@
                     <ShowMore bind:toggle={toggles[i]}>
                             {#each result.description as description}
                                 {#if description.tag === "p"}
-                                    <p>{description.text}</p>
+                                    {#each description.children as child}
+                                        {#if child.tag === "text"}
+                                            <p>{child.text}</p>
+                                        {/if}
+                                    {/each}
                                 {:else if description.tag === "img"}
                                     <figure>
                                         <Fullscreen>
