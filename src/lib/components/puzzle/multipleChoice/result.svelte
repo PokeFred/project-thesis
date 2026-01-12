@@ -1,8 +1,8 @@
 <script lang="ts">
-    import MultipleChoiceResult from "$components/Games/MultipleChoiceGame/MultipleChoiceResult.svelte"
-    import type { Result, Saving } from "."
+    import type { ResultData, SavingData } from "."
+    import ResultComponent from "$components/Games/MultipleChoiceGame/MultipleChoiceResult.svelte"
 
-    let { result, saving }: { result: Result, saving: Saving } = $props()
+    let { result, saving }: { result: ResultData, saving: SavingData } = $props()
 </script>
 
-<MultipleChoiceResult result={saving} />
+<ResultComponent result={result} saving={saving} />

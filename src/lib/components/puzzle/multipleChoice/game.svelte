@@ -1,17 +1,24 @@
 <script lang="ts">
-    import type { GameInput, GameOutput } from "./index"
+    import type { GameData, SavingData } from "."
+    import GameComponent from "$components/Games/MultipleChoiceGame/MultipleChoice.svelte"
+    import type { GameInput as Input } from "$components/Games/MultipleChoiceGame"
     import { onMount } from "svelte"
-    import MultipleChoice from "$components/Games/MultipleChoiceGame/MultipleChoice.svelte"
 
-    let { data, setSubmitable }: { data: GameInput, setSubmitable: () => void } = $props()
+    let { data, setSubmitable }: { data: GameData, setSubmitable: () => void } = $props()
 
-    let multiple: MultipleChoice
-    export function getSubmitData(): GameOutput { return multiple.getSubmitData() }
-    export function getSubmitScore(): number { return multiple.getSubmitScore() }
+    let game: GameComponent
+    export function getSubmitData(): SavingData { return game.getSubmitData() }
+    export function getSubmitScore(): number { return game.getSubmitScore() }
 
     onMount((): void => {
         setSubmitable()
     })
+
+    const input: Input = {
+        options: data.answers.map((element) => {
+            return { id: element.id, answer: element.text, correct: element.isCorrect }
+        })
+    }
 </script>
 
-<MultipleChoice bind:this={multiple} gameInput={data} />
+<GameComponent bind:this={game} input={input} />

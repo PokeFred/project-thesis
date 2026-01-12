@@ -1,17 +1,15 @@
-export type Introduction = {
+export type IntroductionData = {
     text: string[]
 }
 
-export type GameInput = {
-    answers: { text: string, isCorrect: boolean, description: {}[] }[]
+export type GameData = {
+    answers: { id: number, text: string, isCorrect: boolean }[]
 }
 
-export type GameOutput = {
-    answers: { text: string, isCorrect: boolean, description: {}[] }[]
+export type ResultData = {
+    answers: { id: number, text: string, description: [], isCorrect: boolean }[]
 }
 
-export type Result = {}
-
-export type Saving = {
-    answers: { text: string, isCorrect: boolean, description: {}[] }[]
+export type SavingData = {
+    answers: { id: number, selected: boolean }[]
 }

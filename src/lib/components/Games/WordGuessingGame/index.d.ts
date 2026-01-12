@@ -1,3 +1,6 @@
+// TODO MERGE
+
+
 export type Introduction = {
     text: string[]
 }
@@ -18,10 +21,13 @@ export type Result = {
 
 
 export type Hint = {
+    tag: "img"
     src: string,
     alt: string,
     caption: string,
-    hints?: {
+} | {
+    tag: "text",
+    text: {
         normal?: string,
         crossed?: string
     }
@@ -29,7 +35,5 @@ export type Hint = {
 
 export type Question = {
     solution: string,
-    left: Hint,
-    right: Hint,
-    operator: string
+    hints: Hint[]
 }

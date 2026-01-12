@@ -5,6 +5,7 @@ export type Introduction = {
 export type GameInput = {
     leftHeader: string,
     rightHeader: string,
+    options: string[],
     pairs: Pair[]
 }
 
@@ -13,8 +14,11 @@ export type GameOutput = {
 }
 
 export type Result = {
-    answers: string[],
     leftHeader: string,
     rightHeader: string,
-    pairs: Pair[]
+    pairs: Pair[],
+    informations: {
+        title: string,
+        data: any[]
+    }
 }
