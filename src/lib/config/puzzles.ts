@@ -56,7 +56,7 @@ const puzzles: Puzzle[] = [
     {
         id: 11,
         type: "multiple-choice-puzzle",
-        title: "Rätsel 01",
+        title: "Multiple Choice",
         requirements: [], // [10]
         score: 24,
         data: {
@@ -92,7 +92,7 @@ const puzzles: Puzzle[] = [
     {
         id: 12,
         type: "matching-game-puzzle",
-        title: "Rätsel 02",
+        title: "Zuordnungsspiel",
         requirements: [], // [10]
         score: 21,
         data: {
@@ -150,7 +150,7 @@ const puzzles: Puzzle[] = [
     {
         id: 13,
         type: "drag-drop-puzzle",
-        title: "Rätsel 03",
+        title: "Puzzle",
         requirements: [], // [10]
         score: 15,
         data: {
@@ -216,7 +216,7 @@ const puzzles: Puzzle[] = [
     {
         id: 21,
         type: "word-guessing-puzzle",
-        title: "Rätsel 01",
+        title: "Bilderrätsel 1",
         requirements: [], // [20]
         score: 3,
         data: {
@@ -240,7 +240,7 @@ const puzzles: Puzzle[] = [
     {
         id: 31,
         type: "text-select-puzzle",
-        title: "Rätsel 01",
+        title: "Lückentext",
         requirements: [], // [30]
         score: 21,
         data: {
@@ -255,8 +255,8 @@ const puzzles: Puzzle[] = [
     },
     {
         id: 32,
-        type: "multiple-choice-puzzle",
-        title: "Rätsel 02",
+        type: "single-choice-puzzle",
+        title: "Multiple Choice",
         requirements: [], // [30]
         score: 3,
         data: {
@@ -272,17 +272,18 @@ const puzzles: Puzzle[] = [
             },
             result: {
                 answers: [
-                    { id: 0, text: "1952", description: [{ tag: "p", children: [{tag: "text", text: "Doch warum erst 1952? Nach dem Krieg fehlte es an Geld und Technik. Erst mit dem Wirtschaftsaufschwung ab den 1950 er Jahren konnte man sich modernen Komfort wie Rolltreppen leisten. Sie standen für Fortschritt und modernes Einkaufen." }] }], isCorrect: true },
-                    { id: 1, text: "1932", description: [], isCorrect: false },
-                    { id: 2, text: "1972", description: [], isCorrect: false }
-                ]
+                    { id: 0, text: "1952", isCorrect: true },
+                    { id: 1, text: "1932", isCorrect: false },
+                    { id: 2, text: "1972", isCorrect: false }
+                ],
+                text: ["Doch warum erst 1952? Nach dem Krieg fehlte es an Geld und Technik. Erst mit dem Wirtschaftsaufschwung ab den 1950 er Jahren konnte man sich modernen Komfort wie Rolltreppen leisten. Sie standen für Fortschritt und modernes Einkaufen."]
             }
         }
     },
     {
         id: 33,
         type: "error-spotting-puzzle",
-        title: "Rätsel 03",
+        title: "Suchbild",
         requirements: [], // [30]
         score: 15,
         data: {
@@ -291,12 +292,10 @@ const puzzles: Puzzle[] = [
                 description: []
             },
             game: {
-                path: "/station_03/raetsel_03/game",
-                caption: "Originalbild"
+                path: "/station_03/raetsel_03/game"
             },
             result: {
-                img: "/station_03/raetsel_03/game/original.png",
-                caption: "Originalbild"
+                path: "/station_03/raetsel_03/game"
             }
         }
     },
@@ -315,9 +314,9 @@ const puzzles: Puzzle[] = [
     {
         id: 41,
         type: "drag-drop-puzzle",
-        title: "Rätsel 01",
+        title: "Wörter erraten",
         requirements: [], // [40]
-        score: 24,
+        score: 9,
         data: {
             introduction: {
                 title: "",
@@ -329,14 +328,15 @@ const puzzles: Puzzle[] = [
             },
             result: {
                 img: "/station_04/raetsel_01/game/Background.png",
-                caption: ""
+                caption: "",
+                scoreDescription: "Wörtern"
             }
         }
     },
     {
         id: 42,
         type: "multiple-choice-puzzle",
-        title: "Rätsel 02",
+        title: "Multiple Choice",
         requirements: [], // [40]
         score: 3,
         data: {
@@ -378,7 +378,7 @@ const puzzles: Puzzle[] = [
     {
         id: 51,
         type: "drag-drop-puzzle",
-        title: "Rätsel 01",
+        title: "Zuordnungsspiel",
         requirements: [], // [50]
         score: 15,
         data: {
@@ -399,7 +399,7 @@ const puzzles: Puzzle[] = [
     {
         id: 52,
         type: "drag-drop-puzzle",
-        title: "Rätsel 02",
+        title: "Puzzle",
         requirements: [], // [50]
         score: 12,
         data: {
@@ -420,7 +420,7 @@ const puzzles: Puzzle[] = [
     {
         id: 53,
         type: "placeholder-puzzle",
-        title: "Rätsel 03",
+        title: "Suchaufgabe",
         requirements: [], // [50]
         score: 0,
         data: {
@@ -444,7 +444,7 @@ const puzzles: Puzzle[] = [
     {
         id: 61,
         type: "placeholder-puzzle",
-        title: "Rätsel 01",
+        title: "Zuordnungsspiel",
         requirements: [], // [60]
         score: 0,
         data: {
@@ -492,7 +492,7 @@ const puzzles: Puzzle[] = [
     {
         id: 81,
         type: "placeholder-puzzle",
-        title: "Rätsel 01",
+        title: "Quizfragen",
         requirements: [], // [80]
         score: 0,
         data: {
@@ -516,7 +516,7 @@ const puzzles: Puzzle[] = [
     {
         id: 91,
         type: "placeholder-puzzle",
-        title: "Rätsel 01",
+        title: "Suchaufgabe",
         requirements: [], // [90]
         score: 0,
         data: {
@@ -528,7 +528,7 @@ const puzzles: Puzzle[] = [
     {
         id: 92,
         type: "placeholder-puzzle",
-        title: "Rätsel 02",
+        title: "Suchaufgabe",
         requirements: [], // [90]
         score: 0,
         data: {

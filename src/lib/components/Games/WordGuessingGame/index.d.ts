@@ -10,12 +10,11 @@ export type GameInput = {
 }
 
 export type GameOutput = {
-    inputs: string[]
+    match: boolean
 }
 
 export type Result = {
     solutions: string[],
-    inputs: string[]
 }
 
 

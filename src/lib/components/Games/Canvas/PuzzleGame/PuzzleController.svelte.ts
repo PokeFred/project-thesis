@@ -3,6 +3,8 @@ import Canvas from "./Canvas.svelte";
 import Puzzle from "./Puzzle.svelte";
 import type { Piece, Slot } from "./Puzzle.svelte";
 import type { KonvaEventObject } from "konva/lib/Node";
+import type { Group } from "konva/lib/Group";
+import type { Shape, ShapeConfig } from "konva/lib/Shape";
 
 const SNAP_RANGE = 20;
 
@@ -15,17 +17,19 @@ export type CutoutData = {
     readonly src: string;
     readonly d: string;
     readonly noise?: string[];
+    readonly group?: number;
 }
 
 export type Background = {
-    readonly src: string,
-    readonly viewbox: string
+    readonly src: string;
+    readonly viewbox: string;
 }
 
 export type SlotGroup = {
-    readonly path: string,
-    readonly piece: HTMLImageElement,
-    readonly noise?: HTMLImageElement[]
+    readonly path: string;
+    readonly piece: HTMLImageElement;
+    readonly noise?: HTMLImageElement[];
+    readonly group?: number;
 }   
 
 export default class PuzzleController {
@@ -45,16 +49,12 @@ export default class PuzzleController {
             this.slotMap.set(slot, this.canvas.Slots[i]);
         });
 
-        this.canvas.Pieces.forEach((piece: Konva.Image, i: number) => {
+        this.canvas.Pieces.flat().forEach((piece: Konva.Image, i: number) => {
             this.pieceMap.set(piece, this.puzzle.Pieces[i]);
         });
     }
 
     public get Puzzle() { return this.puzzle; }
-
-    // public exitFullscreen(): void {
-    //     this.canvas.Fullscreen.disable();
-    // }
 
     public dragStartPiece(event: KonvaEventObject<DragEvent>): void {
         const KONVA_PIECE: Konva.Image | undefined = (event.target as Konva.Image);
@@ -132,6 +132,12 @@ export default class PuzzleController {
         const POS = piece.getAbsolutePosition(piece.getStage()!)
         piece.moveTo(container);
         piece.setAbsolutePosition(POS);
+
+        container.getChildren().sort((a: Group | Shape<ShapeConfig>, b: Group | Shape<ShapeConfig>) => {
+            const A = a.attrs["customZIndex"] || 0;
+            const B = b.attrs["customZIndex"] || 0;
+            return A - B;
+        }).forEach((c: Group | Shape<ShapeConfig>, i: number) => c.setZIndex(i));
     }
 
     private getConvaSlot(piece: Konva.Image): Konva.Path | undefined {

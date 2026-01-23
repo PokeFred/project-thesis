@@ -19,6 +19,8 @@
     import ErrorSpottingGame from "$components/puzzle/errorSpotting/game.svelte"
     import WordGuessingIntroduction from "$components/puzzle/wordGuessing/introduction.svelte"
     import WordGuessingGame from "$components/puzzle/wordGuessing/game.svelte"
+    import SingleChoiceIntroduction from "$components/puzzle/singleChoice/introduction.svelte"
+    import SingleChoiceGame from "$components/puzzle/singleChoice/game.svelte"
 
     let { data }: PageProps = $props()
 
@@ -28,6 +30,8 @@
     let textSelect: TextSelectGame
     // svelte-ignore non_reactive_update
     let matchingGame: MatchingGameGame
+    // svelte-ignore non_reactive_update
+    let singleChoice: SingleChoiceGame
     // svelte-ignore non_reactive_update
     let multipleChoice: MultipleChoiceGame
     // svelte-ignore non_reactive_update
@@ -61,6 +65,10 @@
             rScore = matchingGame.getSubmitScore()
             rdata = matchingGame.getSubmitData()
         }
+        if (data.puzzle.type === "single-choice-puzzle") {
+            rScore = singleChoice.getSubmitScore()
+            rdata = singleChoice.getSubmitData()
+        }
         if (data.puzzle.type === "multiple-choice-puzzle") {
             rScore = multipleChoice.getSubmitScore()
             rdata = multipleChoice.getSubmitData()
@@ -68,6 +76,14 @@
         if (data.puzzle.type === "drag-drop-puzzle") {
             rScore = dragDrop.getSubmitScore()
             rdata = dragDrop.getSubmitData()
+        }
+        if (data.puzzle.type === "error-spotting-puzzle") {
+            rScore = errorSpotting.getSubmitScore()
+            rdata = errorSpotting.getSubmitData()
+        }
+        if (data.puzzle.type === "word-guessing-puzzle") {
+            rScore = wordGuessing.getSubmitScore()
+            rdata = wordGuessing.getSubmitData()
         }
 
         add({ id: data.puzzle.id, score: rScore, data: rdata })
@@ -86,9 +102,13 @@
         <span class="font-medium text-[16px] uppercase tracking-[1.28px]">{data.station.title}</span>
         <BackButton url={`/s/${data.station.id}`} />
     </div>
-    <div class="mt-5.5 mb-15 w-full h-auto text-primary bg-secondary rounded-full grid grid-cols-[auto_52px] items-center gap-4 px-6 py-2">
-        <span class="font-medium text-[20px] text-left">{data.puzzle.title}</span>
-        <span class="font-medium text-[16px] text-right"><span>{data.puzzle.score.current}/{data.puzzle.score.max}</span></span>
+    <div class="-mx-4 bg-secondary">
+        <div class="mx-4">
+            <div class="mt-5.5 mb-15 w-full h-auto text-primary bg-secondary grid grid-cols-[auto_52px] items-center gap-4 px-6 py-2">
+                <span class="font-medium text-[20px] text-left">{data.puzzle.title}</span>
+                <span class="font-medium text-[16px] text-right"><span>{data.puzzle.score.current}/{data.puzzle.score.max}</span></span>
+            </div>
+        </div>
     </div>
     {#if data.puzzle.type === "gps-puzzle"}
         <GpsIntroduction data={data.introduction} />
@@ -101,6 +121,10 @@
     {#if data.puzzle.type === "matching-game-puzzle"}
         <MatchingGameIntroduction data={data.introduction} />
         <MatchingGameGame bind:this={matchingGame} data={data.game} setSubmitable={setSubmitable} />
+    {/if}
+    {#if data.puzzle.type === "single-choice-puzzle"}
+        <SingleChoiceIntroduction data={data.introduction} />
+        <SingleChoiceGame bind:this={singleChoice} data={data.game} setSubmitable={setSubmitable} />
     {/if}
     {#if data.puzzle.type === "multiple-choice-puzzle"}
         <MultipleChoiceIntroduction data={data.introduction} />

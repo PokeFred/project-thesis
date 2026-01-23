@@ -11,47 +11,53 @@
     export function getSubmitScore(): number { return game.getSubmitScore() }
 
 	onMount((): void => {
-        // TODO (Cedric) remove after meeting
-        //setSubmitable()
+        setSubmitable()
     })
 
     const input: Input =  {
         questions: [
             {
-                solution: "Dille & Kamille",
-                left: {
-                    src: "https://placehold.co/600x400",
-                    alt: "https://placehold.co/600x400",
-                    caption: "Abbildung",
-                    hints: {
-                        normal: "P=D",
-                        crossed: "n"
+                hints: [
+                    {
+                        tag: "img",
+                        src: "/station_02/raetsel_01/game/image_02.png",
+                        alt: "test",
+                        caption: ""
+                    },
+                    {
+                        tag: "text",
+                        text: {
+                            // crossed: "sel",
+                            crossed: "schaft",
+                            // normal: " + chen"
+                        }
+                    },
+                    {
+                        tag: "text",
+                        text: {
+                            normal: "+"
+                        }
+                    },  
+                    {
+                        tag: "text",
+                        text: {
+                            normal: "&"
+                        }
+                    },
+                    {
+                        tag: "text",
+                        text: {
+                            normal: "+"
+                        }
+                    },
+                    {
+                        tag: "img",
+                        src: "/station_02/raetsel_01/game/image_03.png",
+                        alt: "test",
+                        caption: ""
                     }
-                },
-                operator: "&",
-                right: {
-                    src: "https://placehold.co/600x400",
-                    alt: "https://placehold.co/600x400",
-                    caption: "Abbildung",
-                }
-            },
-            {
-                solution: "Dille & Kamille",
-                left: {
-                    src: "https://placehold.co/600x400",
-                    alt: "https://placehold.co/600x400",
-                    caption: "Abbildung",
-                    hints: {
-                        normal: "P=D",
-                        crossed: "n"
-                    }
-                },
-                operator: "&",
-                right: {
-                    src: "https://placehold.co/600x400",
-                    alt: "https://placehold.co/600x400",
-                    caption: "Abbildung",
-                }
+                ],
+                solution: "Tewes"
             }
         ]
     }

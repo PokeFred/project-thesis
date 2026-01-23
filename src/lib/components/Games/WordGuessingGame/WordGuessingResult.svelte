@@ -1,20 +1,12 @@
 <script lang="ts">
     import Fullscreen from "$components/Fullscreen.svelte";
-    import type { GameInput, Hint, Question } from ".";
-    import WordGuessing from "./WordGuessing.svelte";
+    import type { ResultData, SavingData } from "$components/puzzle/wordGuessing"
 
-    const { input }: { input: GameInput } = $props();
-
-    const solutions: string[] = input.questions.map((question: Question) => question.solution);
-
-    const wordGuessingGame: WordGuessing = new WordGuessing(solutions);
-
-    export const getSubmitData = wordGuessingGame.complete.bind(wordGuessingGame);
-    export const getSubmitScore = wordGuessingGame.score.bind(wordGuessingGame);
+    let { result, saving }: { result: ResultData, saving: SavingData } = $props();
 </script>
 
 <div class="flex flex-col border-t-2 pt-21">
-    {#each input.questions as question, i }
+    {#each result.questions as question, i }
         <div>
             <div class="flex flex-col gap-9">
                 {#each question.hints as hint }
@@ -32,7 +24,9 @@
                     </div>
                 {/each}
             </div>
-            <label class="block h-12 mt-10"><input type="text" placeholder="Tippe hier deine Lösung ein" bind:value={wordGuessingGame.Inputs[i]} class="inline-block w-full h-full pl-2 border-b-2 font-medium text-[18px] leading-6 border-secondary placeholder-secondary/60"></label>
+            <label class="block h-12 mt-10 mb-6"><input type="text" disabled={true} value={question.solution} class="inline-block w-full h-full pl-2 border-b-2 font-medium text-[18px] leading-6 border-secondary placeholder-secondary/60"></label>
+            <p class="flex justify-between items-center h-8 px-8 -mx-4 mt-7 mb-6 bg-secondary text-primary text-[16px] font-bold leading-6 tracking-[0.96px]">Du hast {saving.match !== undefined ? (saving.match[i] ? "richtig" : "falsch") : "falsch"} gerätselt</p>
+            <p class="pl-1.5 font-medium text-[18px] leading-6">{question.solutionText}</p>
         </div>
     {/each}
 </div>

@@ -15,6 +15,8 @@
     import ErrorSpottingResult from "$components/puzzle/errorSpotting/result.svelte"
     import WordGuessingIntroduction from "$components/puzzle/wordGuessing/introduction.svelte"
     import WordGuessingResult from "$components/puzzle/wordGuessing/result.svelte"
+    import SingleChoiceIntroduction from "$components/puzzle/singleChoice/introduction.svelte"
+    import SingleChoiceResult from "$components/puzzle/singleChoice/result.svelte"
 
     let { data }: PageProps = $props()
 </script>
@@ -24,9 +26,13 @@
         <span class="text-[16px] font-medium uppercase tracking-[1.28px]">{data.station.title}</span>
         <BackButton url={`/s/${data.station.id}`} />
     </div>
-    <div class="mt-5.5 mb-15 w-full h-auto text-primary bg-secondary rounded-full grid grid-cols-[auto_52px] items-center gap-4 px-6 py-2">
-        <span class="font-medium text-[20px] text-left">{data.puzzle.title}</span>
-        <span class="font-medium text-[16px] text-right"><span>{data.puzzle.score.current}/{data.puzzle.score.max}</span></span>
+    <div class="-mx-4 bg-secondary">
+        <div class="mx-4">
+            <div class="mt-5.5 mb-15 w-full h-auto text-primary bg-secondary rounded-full grid grid-cols-[auto_52px] items-center gap-4 px-6 py-2">
+                <span class="font-medium text-[20px] text-left">{data.puzzle.title}</span>
+                <span class="font-medium text-[16px] text-right"><span>{data.puzzle.score.current}/{data.puzzle.score.max}</span></span>
+            </div>
+        </div>
     </div>
     {#if data.puzzle.type === "gps-puzzle"}
         <GpsIntroduction data={data.introduction} />
@@ -35,6 +41,10 @@
     {#if data.puzzle.type === "matching-game-puzzle"}
         <MatchingGameIntroduction data={data.introduction} />
         <MatchingGameResult result={data.result} saving={data.saving} />
+    {/if}
+    {#if data.puzzle.type === "single-choice-puzzle"}
+        <SingleChoiceIntroduction data={data.introduction} />
+        <SingleChoiceResult result={data.result} saving={data.saving} />
     {/if}
     {#if data.puzzle.type === "multiple-choice-puzzle"}
         <MultipleChoiceIntroduction data={data.introduction} />
