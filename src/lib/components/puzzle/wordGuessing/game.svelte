@@ -14,53 +14,7 @@
         setSubmitable()
     })
 
-    const input: Input =  {
-        questions: [
-            {
-                hints: [
-                    {
-                        tag: "img",
-                        src: "/station_02/raetsel_01/game/image_02.png",
-                        alt: "test",
-                        caption: ""
-                    },
-                    {
-                        tag: "text",
-                        text: {
-                            // crossed: "sel",
-                            crossed: "schaft",
-                            // normal: " + chen"
-                        }
-                    },
-                    {
-                        tag: "text",
-                        text: {
-                            normal: "+"
-                        }
-                    },  
-                    {
-                        tag: "text",
-                        text: {
-                            normal: "&"
-                        }
-                    },
-                    {
-                        tag: "text",
-                        text: {
-                            normal: "+"
-                        }
-                    },
-                    {
-                        tag: "img",
-                        src: "/station_02/raetsel_01/game/image_03.png",
-                        alt: "test",
-                        caption: ""
-                    }
-                ],
-                solution: "Tewes"
-            }
-        ]
-    }
+    const input: Input =  data
 </script>
 
 <GameComponent bind:this={game} input={input} />

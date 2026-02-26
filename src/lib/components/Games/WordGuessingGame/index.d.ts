@@ -1,4 +1,3 @@
-// TODO MERGE
 
 
 export type Introduction = {
@@ -23,7 +22,10 @@ export type Hint = {
     tag: "img"
     src: string,
     alt: string,
-    caption: string,
+    caption?: {
+        caption?: string,
+        src?: string
+    }
 } | {
     tag: "text",
     text: {
@@ -33,6 +35,6 @@ export type Hint = {
 }
 
 export type Question = {
-    solution: string,
-    hints: Hint[]
+    solutions: string[],
+    hints?: Hint[]
 }

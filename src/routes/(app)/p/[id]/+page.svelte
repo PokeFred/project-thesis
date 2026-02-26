@@ -1,6 +1,6 @@
 <script lang="ts">
     import type { PageProps } from "./$types"
-    import BackButton from "../../s/BackButton.svelte"
+    import BackButton from "$components/BackButton.svelte"
     import GpsIntroduction from "$components/puzzle/gps/introduction.svelte"
     import GpsGame from "$components/puzzle/gps/game.svelte"
     import TextSelectIntroduction from "$components/puzzle/textSelect/introduction.svelte"
@@ -9,18 +9,19 @@
     import MatchingGameGame from "$components/puzzle/matchingGame/game.svelte"
     import MultipleChoiceIntroduction from "$components/puzzle/multipleChoice/introduction.svelte"
     import MultipleChoiceGame from "$components/puzzle/multipleChoice/game.svelte"
-    import Modal from "./ConfirmModal.svelte"
+    import Modal from "$components/modals/GameConfirmModal.svelte"
     import { add } from "$stores"
     import { goto } from "$app/navigation"
     import DragDropIntroduction from "$components/puzzle/dragDrop/introduction.svelte"
     import DragDropGame from "$components/puzzle/dragDrop/game.svelte"
-    import ScrollButton from "../../s/ScrollButton.svelte";
+    import ScrollButton from "$components/ScrollButton.svelte";
     import ErrorSpottingIntroduction from "$components/puzzle/errorSpotting/introduction.svelte"
     import ErrorSpottingGame from "$components/puzzle/errorSpotting/game.svelte"
     import WordGuessingIntroduction from "$components/puzzle/wordGuessing/introduction.svelte"
     import WordGuessingGame from "$components/puzzle/wordGuessing/game.svelte"
     import SingleChoiceIntroduction from "$components/puzzle/singleChoice/introduction.svelte"
     import SingleChoiceGame from "$components/puzzle/singleChoice/game.svelte"
+    import Introduction from "$components/puzzle/introductionBuilder/introduction.svelte";
 
     let { data }: PageProps = $props()
 
@@ -41,6 +42,7 @@
     // svelte-ignore non_reactive_update
     let wordGuessing: WordGuessingGame
 
+    let skipIntroduction: (() => void) | undefined = $state(undefined);
     let submitable: boolean = $state<boolean>(false)
     function setSubmitable(): void {
         submitable = true
@@ -88,9 +90,9 @@
 
         add({ id: data.puzzle.id, score: rScore, data: rdata })
         if (data.puzzle.type !== "gps-puzzle") {
-            goto(`/p/${data.puzzle.id}/result`)
+            goto(`/project-thesis-tests/p/${data.puzzle.id}/result`)
         } else {
-            goto(`/s/${data.station.id}`)
+            goto(`/project-thesis-tests/s/${data.station.id}`)
         }
     }
 </script>
@@ -100,7 +102,7 @@
 <div class="w-full h-auto text-secondary">
     <div class="w-full h-auto flex justify-between items-center my-1 pl-6 pr-4">
         <span class="font-medium text-[16px] uppercase tracking-[1.28px]">{data.station.title}</span>
-        <BackButton url={`/s/${data.station.id}`} />
+        <BackButton path={`/project-thesis-tests/s/${data.station.id}`} />
     </div>
     <div class="-mx-4 bg-secondary">
         <div class="mx-4">
@@ -123,7 +125,7 @@
         <MatchingGameGame bind:this={matchingGame} data={data.game} setSubmitable={setSubmitable} />
     {/if}
     {#if data.puzzle.type === "single-choice-puzzle"}
-        <SingleChoiceIntroduction data={data.introduction} />
+        <Introduction data={data.introduction.data} />
         <SingleChoiceGame bind:this={singleChoice} data={data.game} setSubmitable={setSubmitable} />
     {/if}
     {#if data.puzzle.type === "multiple-choice-puzzle"}
@@ -132,19 +134,23 @@
     {/if}
     {#if data.puzzle.type === "drag-drop-puzzle"}
         <DragDropIntroduction data={data.introduction} />
-        <DragDropGame bind:this={dragDrop} data={data.game} setSubmitable={setSubmitable} />
+        <DragDropGame bind:this={dragDrop} data={data.game} setSubmitable={setSubmitable} bind:skipIntroduction={skipIntroduction} />
     {/if}
     {#if data.puzzle.type === "error-spotting-puzzle"}
-        <ErrorSpottingIntroduction data={data.introduction} />
+        <Introduction data={data.introduction.data} />
         <ErrorSpottingGame bind:this={errorSpotting} data={data.game} setSubmitable={setSubmitable} />
     {/if}
     {#if data.puzzle.type === "word-guessing-puzzle"}
-        <WordGuessingIntroduction data={data.introduction} />
+        <Introduction data={data.introduction.data} />
         <WordGuessingGame bind:this={wordGuessing} data={data.game} setSubmitable={setSubmitable} />
     {/if}
     {#if submitable}
         <div class="mt-7.5 mx-auto w-full h-auto">
-            <button onclick={(): void => modal.openModal()} class="w-full h-auto pl-6 text-left text-[20px] font-medium text-primary bg-secondary rounded-full py-2 cursor-pointer active:scale-95">{(data.puzzle.type !== "gps-puzzle") ? "Ergebnis anzeigen" : "Gehe zu den Rätseln"}</button>
+            {#if skipIntroduction}
+                <button onclick={() => { skipIntroduction?.(); skipIntroduction = undefined }} class="w-full h-auto pl-6 text-left text-[20px] font-medium text-primary bg-secondary rounded-full py-2 cursor-pointer active:scale-95">Weiter</button>
+            {:else}
+                <button onclick={(): void => data.puzzle.type === "gps-puzzle" ? submit() : modal.openModal()} class="w-full h-auto pl-6 text-left text-[20px] font-medium text-primary bg-secondary rounded-full py-2 cursor-pointer active:scale-95">{(data.puzzle.type !== "gps-puzzle") ? "Ergebnis anzeigen" : "Gehe zu den Rätseln"}</button>
+            {/if}
         </div>
     {/if}
     <ScrollButton />

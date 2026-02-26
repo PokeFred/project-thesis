@@ -3,24 +3,10 @@ import Stations from "$config/stations"
 import type { Station } from "$config/stations"
 import Puzzles from "$config/puzzles"
 import type { Puzzle } from "$config/puzzles"
+import { getPuzzleScore } from "$stores"
 import type { AccordionData, AccordionQuestion } from "$components/accordions/Accordion"
-import { getGame, getPuzzleScore } from "$stores"
-
-type Score = {
-    current: number,
-    max: number,
-    completion: number
-}
-
-function toScore(current: number, max: number): Score {
-    const completion: number = Number((current * 100 / max).toFixed(1))
-
-    return {
-        current: current,
-        max: max,
-        completion: Number.isNaN(completion) ? 0 : completion
-    }
-}
+import { toScore } from "$utils/score"
+import type { Score } from "$utils/score"
 
 function getStationScore(station: Station): Score {
     const current: number = station.puzzles
@@ -37,7 +23,7 @@ type _Chapters = {}
 
 function getStationChapters(station: Station): _Chapters[] {
     const chapters = station.chapters
-        .map((element: any): AccordionQuestion => { return { type: "question", question: element.title, answer: element.content } })
+        .map((element: any): AccordionQuestion => { return { type: "question", question: element.title, answer: element.data } })
         .map((element: AccordionQuestion): AccordionData => [{ type: "seperator" }, element])
         .flat(1)
     chapters.push({ type: "seperator" })
@@ -50,6 +36,7 @@ type _Puzzle = {
     id: number,
     title: string,
     score: Score,
+    done: boolean,
     locked: boolean
 }
 
@@ -59,13 +46,26 @@ function getStationPuzzles(station: Station): _Puzzle[] {
         .filter((element: Puzzle): boolean => element.type !== "placeholder-puzzle")
         .map((element: Puzzle): _Puzzle => {
             const current: number = getPuzzleScore(element.id)
+            const isLocked: boolean = element.requirements
+                .map((element: number): number => {
+                    const puzzle: Puzzle = Puzzles.filter((e: Puzzle): boolean => e.id === element)[0]
+                    console.log(element)
+                    console.log(puzzle)
+
+                    return element
+                })
+                .map((element: number): number => getPuzzleScore(element))
+                .map((element: number): boolean => element > 0)
+                .filter((element: boolean): boolean => !element)
+                .length > 0
 
             return {
                 type: element.type,
                 id: element.id,
                 title: element.title,
                 score: toScore(current, element.score),
-                locked: false
+                done: current !== 0,
+                locked: isLocked
             }
         })
 }

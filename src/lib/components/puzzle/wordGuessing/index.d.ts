@@ -3,11 +3,11 @@ export type IntroductionData = {
 }
 
 export type GameData = {
-    questions: { solution: string, hints: any[] }[]
+    questions: { solutions: string[], hints: any[] }[]
 }
 
 export type ResultData = {
-    questions: { solution: string, hints: any[], solutionText: string }[]
+    questions: { solution: string, hints?: any[], solutionText?: string }[]
 }
 
 export type SavingData = {

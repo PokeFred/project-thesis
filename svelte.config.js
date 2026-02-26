@@ -16,14 +16,15 @@ const config = {
             publicPrefix: "PUBLIC_",
             privatePrefix: "PRIVATE_"
         },
+        paths: {
+            base: (process.env.NODE_ENV === "production") ? "/project-thesis-tests" : ""
+        },
         alias: {
             $config: "./src/lib/config",
             $components: "./src/lib/components",
             $utils: "./src/lib/utils",
             $images: "./src/lib/images",
             $stores: "./src/lib/stores",
-            $manager: "./src/lib/manager",
-            $styles: "./src/lib/styles",
             $types: "./src/lib/types"
         }
     }

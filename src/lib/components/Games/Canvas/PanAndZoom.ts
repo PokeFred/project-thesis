@@ -1,4 +1,4 @@
-import type Konva from "konva";
+import Konva from "konva";
 import type { KonvaEventObject } from "konva/lib/Node";
 import type { Vector2d } from "konva/lib/types";
 
@@ -8,7 +8,6 @@ export default class PanAndZoom {
     
     private lastCenter: Vector2d | null;
     private lastDist;
-    private dragStopped;
 
     private readonly MAX_ZOOM = 5;
     private readonly MIN_ZOOM;
@@ -18,8 +17,13 @@ export default class PanAndZoom {
         this.boundary = boundary;
         this.lastCenter = null;
         this.lastDist = 0;
-        this.dragStopped = false;
         this.MIN_ZOOM = container.scaleX();
+        // stop konva drag
+        this.container.getStage()?.on("touchstart", (e) => {
+            if (e.evt.touches.length > 1) {
+                Konva.DD.node?.stopDrag();
+            } 
+        })
     }
 
     private getDistance(p1: Vector2d, p2: Vector2d) {
@@ -42,12 +46,6 @@ export default class PanAndZoom {
         e.evt.preventDefault();
         const touch1 = e.evt.touches[0];
         const touch2 = e.evt.touches[1];
-
-        // we need to restore dragging, if it was cancelled by multi-touch
-        if (touch1 && !touch2 && !this.container.isDragging() && this.dragStopped) {
-            this.container.startDrag();
-            this.dragStopped = false;
-        }
 
         if(touch1 && !touch2) {
             const p1 = {
@@ -93,13 +91,6 @@ export default class PanAndZoom {
         }
 
         else if (touch1 && touch2) {
-            // if the stage was under Konva's drag&drop
-            // we need to stop it, and implement our own pan logic with two pointers
-            if (this.container.isDragging()) {
-                this.dragStopped = true;
-                this.container.stopDrag();
-            }
-
             const rect = this.boundary.getClientRect();
 
             const p1 = {

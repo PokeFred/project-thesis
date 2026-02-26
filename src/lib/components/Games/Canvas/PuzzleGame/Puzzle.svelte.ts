@@ -91,11 +91,19 @@ export default class Puzzle implements Quiz<SavingData> {
             const GROUP: Group = this.groups.get(slotGroup.group) ?? this.groups.set(slotGroup.group, new Group()).get(slotGroup.group)!;
             GROUP.addPiece(piece);
         });
-        this.groups.forEach((group, key) => console.log(key, group));
     }
 
     public get Slots() { return this.slots; }
     public get Pieces() { return this.pieces; }
+
+    public isComplete(): boolean {
+        for (let i = 0; i < this.slots.length; i++) {
+            if (!this.slots[i].Selected) {
+                return false;
+            }            
+        }
+        return true;
+    }
 
     public score(): number {
         let score: number = 0;

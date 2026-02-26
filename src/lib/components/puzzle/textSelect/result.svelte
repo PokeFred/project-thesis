@@ -5,5 +5,4 @@
     let { result, saving }: { result: ResultData, saving: SavingData } = $props()
 </script>
 
-<!-- TODO (Simon) -->
-<!-- <ResultComponent result={result} saving={saving} /> -->
+<ResultComponent result={result} saving={saving} />

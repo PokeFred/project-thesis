@@ -1,7 +1,7 @@
 <script lang="ts">
     import type { PageProps } from "./$types"
-    import BackButton from "../../../s/BackButton.svelte"
-    import ScrollButton from "../../../s/ScrollButton.svelte"
+    import BackButton from "$components/BackButton.svelte"
+    import ScrollButton from "$components/ScrollButton.svelte"
     import GpsIntroduction from "$components/puzzle/gps/introduction.svelte"
     import GpsResult from "$components/puzzle/gps/result.svelte"
     import MultipleChoiceIntroduction from "$components/puzzle/multipleChoice/introduction.svelte"
@@ -17,6 +17,9 @@
     import WordGuessingResult from "$components/puzzle/wordGuessing/result.svelte"
     import SingleChoiceIntroduction from "$components/puzzle/singleChoice/introduction.svelte"
     import SingleChoiceResult from "$components/puzzle/singleChoice/result.svelte"
+    import Introduction from "$components/puzzle/introductionBuilder/introduction.svelte";
+    import TextSelectIntroduction from "$components/puzzle/textSelect/introduction.svelte"
+    import TextSelectResult from "$components/puzzle/textSelect/result.svelte"
 
     let { data }: PageProps = $props()
 </script>
@@ -24,7 +27,7 @@
 <div class="w-full h-auto text-secondary">
     <div class="w-full h-auto flex justify-between items-center my-1 pl-6 pr-4">
         <span class="text-[16px] font-medium uppercase tracking-[1.28px]">{data.station.title}</span>
-        <BackButton url={`/s/${data.station.id}`} />
+        <BackButton path={`/project-thesis-tests/s/${data.station.id}`} />
     </div>
     <div class="-mx-4 bg-secondary">
         <div class="mx-4">
@@ -38,12 +41,16 @@
         <GpsIntroduction data={data.introduction} />
         <GpsResult data={data.result} />
     {/if}
+    {#if data.puzzle.type === "text-select-puzzle"}
+        <TextSelectIntroduction data={data.introduction} />
+        <TextSelectResult result={data.result} saving={data.saving} />
+    {/if}
     {#if data.puzzle.type === "matching-game-puzzle"}
         <MatchingGameIntroduction data={data.introduction} />
         <MatchingGameResult result={data.result} saving={data.saving} />
     {/if}
     {#if data.puzzle.type === "single-choice-puzzle"}
-        <SingleChoiceIntroduction data={data.introduction} />
+        <Introduction data={data.introduction.data} />
         <SingleChoiceResult result={data.result} saving={data.saving} />
     {/if}
     {#if data.puzzle.type === "multiple-choice-puzzle"}
@@ -55,13 +62,13 @@
         <DragDropResult result={data.result} saving={data.saving} />
     {/if}
     {#if data.puzzle.type === "error-spotting-puzzle"}
-        <ErrorSpottingIntroduction data={data.introduction} />
+        <Introduction data={data.introduction.data} />
         <ErrorSpottingResult result={data.result} saving={data.saving} />
     {/if}
     {#if data.puzzle.type === "word-guessing-puzzle"}
-        <WordGuessingIntroduction data={data.introduction} />
+        <Introduction data={data.introduction.data} />
         <WordGuessingResult result={data.result} saving={data.saving} />
     {/if}
-    <button onclick={()=>goto(`/s/${data.station.id}`)} class="w-full h-11.5 mt-7.5 pl-7 bg-secondary text-left text-[20px] font-medium text-primary rounded-full">Zurück zur Übersicht</button>
+    <button onclick={()=>goto(`/project-thesis-tests/s/${data.station.id}`)} class="w-full h-11.5 mt-7.5 pl-7 bg-secondary text-left text-[20px] font-medium text-primary rounded-full cursor-pointer">Zurück zur Übersicht</button>
     <ScrollButton />
 </div>
