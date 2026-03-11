@@ -4,6 +4,7 @@ import type { Station } from "$config/stations"
 import Puzzles from "$config/puzzles"
 import type { Puzzle } from "$config/puzzles"
 import { getPuzzle } from "$stores"
+import type { Content } from "$components/Games/ContentBuilder/Types"
 
 type _Station = {
     id: number,
@@ -33,7 +34,7 @@ function toScore(current: number, max: number): Score {
     }
 }
 
-export const load: PageLoad = async ({ params }): Promise<{ station: _Station, puzzle: _Puzzle, introduction: any, result: any, saving: any }> => {
+export const load: PageLoad = async ({ params }): Promise<{ station: _Station, puzzle: _Puzzle, introduction: any, result: any, saving: any, content?: Content[] }> => {
     const station: Station = Stations
         .filter((element): boolean => element.puzzles.includes(Number(params.id)))[0]
     const puzzle: Puzzle = Puzzles
@@ -43,17 +44,18 @@ export const load: PageLoad = async ({ params }): Promise<{ station: _Station, p
     return {
         station: {
             id: station.id,
-            title: station.stitle
+            title: station.title
         },
         puzzle: {
             id: puzzle.id,
             type: puzzle.type,
-            title: puzzle.title,
-            score: toScore(store.score, puzzle.score)
+            title: puzzle.type,
+            score: toScore(puzzle.score, puzzle.score)
         },
         introduction: puzzle.data.introduction,
         result: puzzle.data.result,
-        saving: store.data
+        saving: store.data,
+        content: puzzle.data.content
     }
 }
 
