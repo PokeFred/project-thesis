@@ -2,7 +2,7 @@
     import "../app.css"
     import "@fontsource-variable/space-grotesk"
     import type { LayoutProps } from "./$types"
-    import { goto, afterNavigate } from "$app/navigation"
+    import { afterNavigate } from "$app/navigation"
     import { page } from "$app/state"
     import { isRunning, restartGame, stopGame, getScore } from "$stores"
     import PageTransition from "$components/PageTransition.svelte"
@@ -15,6 +15,7 @@
     import { faXmark } from "@fortawesome/free-solid-svg-icons/faXmark"
     import { dev } from "$app/environment"
     import stations from "$config/stations"
+    import { sendTo, navigateTo } from "$utils/url"
 
     let { children }: LayoutProps = $props()
 
@@ -33,12 +34,12 @@
 
     function restart(): void {
         restartGame()
-        window.location.href = "/s"
+        navigateTo("/s")
     }
 
     function stop(): void {
         stopGame()
-        window.location.href = "/"
+        navigateTo("/")
     }
 </script>
 
@@ -48,9 +49,9 @@
 
 <div class="w-screen h-auto min-h-dvh bg-slate-950">
     <div class="mx-auto w-full max-w-lg h-auto min-h-dvh bg-primary grid grid-cols-1 {open ? "grid-rows-[1fr_auto]" : "grid-rows-[auto_1fr]"}">
-        <div class="w-full h-auto text-secondary bg-primary border-b-2 border-secondary grid grid-cols-1 grid-rows-[auto_1fr]">
+        <header class="w-full h-auto text-secondary bg-primary border-b-2 border-secondary grid grid-cols-1 grid-rows-[auto_1fr]">
             <div class="w-full h-14 flex justify-between items-center px-4">
-                <button onclick={(): Promise<void> => isRunning() ? goto("/s") : goto("/")} class="text-2xl font-bold text-left cursor-pointer">Einkaufsspuren</button>
+                <button onclick={(): Promise<void> => isRunning() ? sendTo("/s") : sendTo("/")} class="text-2xl font-bold text-left cursor-pointer">Einkaufsspuren</button>
                 {#if isRunning()}
                     <div class="flex flex-col text-[16px] font-medium leading-6">
                         <span>Punkte</span>
@@ -61,17 +62,17 @@
                         </span>
                     </div>
                 {/if}
-                <button onclick={toggle} class="w-14 h-14 cursor-pointer flex justify-center items-center">
+                <button onclick={toggle} class="w-14 h-14 cursor-pointer flex justify-center items-center" aria-label="Auswahlmenü">
                     <Icon data={open ? faXmark : faBars} class="w-8 h-8" />
                 </button>
             </div>
             <div class="w-full {open ? "h-auto" : "h-0"} text-primary bg-secondary overflow-hidden">
                 <div class="mx-auto w-full max-w-xl h-auto grid grid-cols-1 gap-4 p-4">
                     {#if isRunning()}
-                        <button onclick={(): Promise<void> => goto("/s")} class="w-full h-auto text-xl font-semibold text-left cursor-pointer px-2 py-1 hover:underline hover:opacity-75 active:scale-95">STATIONEN</button>
+                        <button onclick={(): Promise<void> => sendTo("/s")} class="w-full h-auto text-xl font-semibold text-left cursor-pointer px-2 py-1 hover:underline hover:opacity-75 active:scale-95">STATIONEN</button>
                         <hr class="border" />
                         {#if dev}
-                            <button onclick={(): Promise<void> => goto("/p")} class="w-full h-auto text-xl font-semibold text-left cursor-pointer px-2 py-1 hover:underline hover:opacity-75 active:scale-95 text-green-500">RÄTSEL</button>
+                            <button onclick={(): Promise<void> => sendTo("/p")} class="w-full h-auto text-xl font-semibold text-left cursor-pointer px-2 py-1 hover:underline hover:opacity-75 active:scale-95 text-green-500">RÄTSEL</button>
                             <hr class="border" />
                         {/if}
                     {/if}
@@ -79,27 +80,29 @@
                     <hr class="border" />
                     <button onclick={(): void => informationsModal.openModal()} class="w-full h-auto text-xl font-semibold text-left cursor-pointer px-2 py-1 hover:underline hover:opacity-75 active:scale-95">INFOS ZUR NUTZUNG</button>
                     <hr class="border" />
-                    <button onclick={(): Promise<void> => goto("/imprint")} class="w-full h-auto text-xl font-semibold text-left cursor-pointer px-2 py-1 hover:underline hover:opacity-75 active:scale-95">IMPRESSUM</button>
+                    <button onclick={(): Promise<void> => sendTo("/thanks")} class="w-full h-auto text-xl font-semibold text-left cursor-pointer px-2 py-1 hover:underline hover:opacity-75 active:scale-95">DANKSAGUNG</button>
                     <hr class="border" />
-                    <button onclick={(): Promise<void> => goto("/privacy")} class="w-full h-auto text-xl font-semibold text-left cursor-pointer px-2 py-1 hover:underline hover:opacity-75 active:scale-95">DATENSCHUTZ</button>
+                    <button onclick={(): Promise<void> => sendTo("/imprint")} class="w-full h-auto text-xl font-semibold text-left cursor-pointer px-2 py-1 hover:underline hover:opacity-75 active:scale-95">IMPRESSUM</button>
+                    <hr class="border" />
+                    <button onclick={(): Promise<void> => sendTo("/privacy")} class="w-full h-auto text-xl font-semibold text-left cursor-pointer px-2 py-1 hover:underline hover:opacity-75 active:scale-95">DATENSCHUTZ</button>
                     {#if isRunning()}
                         <hr class="border" />
                         <button onclick={(): void => stopModal.openModal()} class="w-full h-auto text-xl font-semibold text-left cursor-pointer px-2 py-1 hover:underline hover:opacity-75 active:scale-95">SPIEL BEENDEN</button>
                     {/if}
                 </div>
             </div>
-        </div>
+        </header>
         <PageTransition>
             <div class="w-full h-full text-primary bg-secondary grid grid-cols-1 grid-rows-[1fr_auto]">
-                <div class="w-full h-full {(new RegExp("\/(s|p)+\/[0-9]+[0-9]*\/")).test(page.url.pathname) ? "text-secondary bg-primary" : "text-primary bg-secondary"} p-4 {open ? "hidden" : ""}">
+                <main class="w-full h-full {(new RegExp("\/(s|p)+\/[0-9]+[0-9]*\/")).test(page.url.pathname) ? "text-secondary bg-primary" : "text-primary bg-secondary"} p-4 {open ? "hidden" : ""}">
                     {@render children()}
-                </div>
-                <div class="w-full h-auto text-secondary bg-primary grid grid-cols-1 gap-2 px-2">
+                </main>
+                <footer class="w-full h-auto py-1 text-secondary bg-primary grid grid-cols-1 gap-2 px-2 border-t-2">
                     <div class="w-full h-auto grid grid-cols-2 gap-4 px-2">
-                        <button onclick={(): Promise<void> => goto("/imprint")} class="mr-auto w-fit h-auto text-base font-semibold text-left cursor-pointer px-4 py-2 hover:underline hover:opacity-75 active:scale-95">Impressum</button>
-                        <button onclick={(): Promise<void> => goto("/privacy")} class="ml-auto w-fit h-auto text-base font-semibold text-right cursor-pointer px-4 py-2 hover:underline hover:opacity-75 active:scale-95">Datenschutz</button>
+                        <button onclick={(): Promise<void> => sendTo("/imprint")} class="mr-auto w-fit h-auto text-base font-semibold text-left cursor-pointer px-4 py-2 hover:underline hover:opacity-75 active:scale-95">Impressum</button>
+                        <button onclick={(): Promise<void> => sendTo("/privacy")} class="ml-auto w-fit h-auto text-base font-semibold text-right cursor-pointer px-4 py-2 hover:underline hover:opacity-75 active:scale-95">Datenschutz</button>
                     </div>
-                </div>
+                </footer>
             </div>
         </PageTransition>
     </div>

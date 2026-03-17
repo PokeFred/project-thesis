@@ -1,5 +1,6 @@
 <script lang="ts">
     import Modal from "$components/modals/Modal.svelte"
+    import { sendTo } from "$utils/url"
 
     let { onConfirm }: { onConfirm: () => void } = $props()
 
@@ -9,8 +10,8 @@
 
 <Modal bind:this={modal} buttonText={"Spiel starten"} onConfirm={onConfirm}>
     <div class="text-[20px] leading-6">
-        <div>Damit dein Fortschritt gespeichert wird, kann die App deine Ergebnisse lokal auf deinem Gerät sichern.</div>
+        <div>Damit dein Fortschritt gespeichert wird, kann die App deine Ergebnisse lokal auf deinem Gerät sicher.</div>
         <div>Es werden keine Daten übertragen oder geteilt.</div>
     </div>
-    <!-- <button onclick={(): Promise<void> => goto("/privacy")} class="w-full h-auto text-lg font-semibold text-left text-primary bg-secondary rounded-full cursor-pointer px-6 py-1 active:scale-95">Datenschutz</button> -->
+    <button onclick={(): Promise<void> => sendTo("/einkaufsspuren/privacy")} class="w-full h-auto text-lg font-semibold text-left text-primary bg-secondary rounded-full cursor-pointer px-6 py-1 active:scale-95">Datenschutz</button>
 </Modal>

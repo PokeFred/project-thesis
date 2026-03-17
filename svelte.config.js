@@ -17,7 +17,8 @@ const config = {
             privatePrefix: "PRIVATE_"
         },
         paths: {
-            //base: (process.env.NODE_ENV === "production") ? "/project-thesis-tests" : ""
+            //base: ""
+            base: "/einkaufsspuren"
         },
         alias: {
             $config: "./src/lib/config",

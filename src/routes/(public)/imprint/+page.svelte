@@ -1,3 +1,7 @@
+<script lang="ts">
+    import { asset } from "$utils/url"
+</script>
+
 <div class="w-full h-auto text-primary">
     <div class="text-xl font-bold underline text-center">Impressum</div>
     <div class="mt-4 w-full h-auto grid grid-cols-1 gap-4">
@@ -40,7 +44,7 @@
             <div>E-Mail: info.mkk@stadtdo.de</div>
             <div>Website: Museum für Kunst und Kulturgeschichte | dortmund.de</div>
         </div>
-        <img src="/app_logos_colored.png" alt="" class="my-4 w-6/12" />
-        <img src="/fh_dortmund_logo.webp" alt="" class="my-4 w-6/12" />
+        <img src={asset("app_logo.webp")} alt="" class="my-4 w-6/12" />
+        <img src={asset("fh-dortmund_logo.webp")} alt="" class="my-4 w-6/12" />
     </div>
 </div>

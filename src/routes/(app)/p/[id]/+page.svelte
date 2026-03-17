@@ -11,7 +11,6 @@
     import MultipleChoiceGame from "$components/puzzle/multipleChoice/game.svelte"
     import Modal from "$components/modals/GameConfirmModal.svelte"
     import { add } from "$stores"
-    import { goto } from "$app/navigation"
     import DragDropIntroduction from "$components/puzzle/dragDrop/introduction.svelte"
     import DragDropGame from "$components/puzzle/dragDrop/game.svelte"
     import ScrollButton from "$components/ScrollButton.svelte";
@@ -21,7 +20,8 @@
     import WordGuessingGame from "$components/puzzle/wordGuessing/game.svelte"
     import SingleChoiceIntroduction from "$components/puzzle/singleChoice/introduction.svelte"
     import SingleChoiceGame from "$components/puzzle/singleChoice/game.svelte"
-    import Introduction from "$components/puzzle/introductionBuilder/introduction.svelte";
+    import Introduction from "$components/puzzle/introductionBuilder/introduction.svelte"
+    import { sendTo } from "$utils/url"
 
     let { data }: PageProps = $props()
 
@@ -90,9 +90,9 @@
 
         add({ id: data.puzzle.id, score: rScore, data: rdata })
         if (data.puzzle.type !== "gps-puzzle") {
-            goto(`/p/${data.puzzle.id}/result`)
+            sendTo(`/p/${data.puzzle.id}/result`)
         } else {
-            goto(`/s/${data.station.id}`)
+            sendTo(`/s/${data.station.id}`)
         }
     }
 </script>

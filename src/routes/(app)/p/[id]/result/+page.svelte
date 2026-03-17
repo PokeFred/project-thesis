@@ -10,7 +10,6 @@
     import MatchingGameResult from "$components/puzzle/matchingGame/result.svelte"
     import DragDropIntroduction from "$components/puzzle/dragDrop/introduction.svelte"
     import DragDropResult from "$components/puzzle/dragDrop/result.svelte"
-    import { goto } from "$app/navigation";
     import ErrorSpottingIntroduction from "$components/puzzle/errorSpotting/introduction.svelte"
     import ErrorSpottingResult from "$components/puzzle/errorSpotting/result.svelte"
     import WordGuessingIntroduction from "$components/puzzle/wordGuessing/introduction.svelte"
@@ -21,6 +20,7 @@
     import TextSelectIntroduction from "$components/puzzle/textSelect/introduction.svelte"
     import TextSelectResult from "$components/puzzle/textSelect/result.svelte"
     import ContentBuilder from "$components/Games/ContentBuilder/ContentBuilder.svelte";
+    import { sendTo } from "$utils/url"
 
     let { data }: PageProps = $props()
 </script>
@@ -70,7 +70,7 @@
         <Introduction data={data.introduction.data} />
         <WordGuessingResult result={data.result} saving={data.saving} />
     {/if}
-    <button onclick={()=>goto(`/s/${data.station.id}`)} class="w-full h-11.5 mt-7.5 pl-7 bg-secondary text-left text-[20px] font-medium text-primary rounded-full cursor-pointer">Zurück zur Übersicht</button>
+    <button onclick={()=> sendTo(`/s/${data.station.id}`)} class="w-full h-11.5 mt-7.5 pl-7 bg-secondary text-left text-[20px] font-medium text-primary rounded-full cursor-pointer">Zurück zur Übersicht</button>
     {#if (data.result.bottom ?? []).length > 0 }
         <div class="mt-8">
             <ContentBuilder content={data.result.bottom} />
