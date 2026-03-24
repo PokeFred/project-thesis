@@ -16,6 +16,7 @@
     import { dev } from "$app/environment"
     import stations from "$config/stations"
     import { sendTo, navigateTo } from "$utils/url"
+    import { _getBasePath } from "$utils/url"
 
     let { children }: LayoutProps = $props()
 
@@ -63,7 +64,16 @@
                     </div>
                 {/if}
                 <button onclick={toggle} class="w-14 h-14 cursor-pointer flex justify-center items-center" aria-label="Auswahlmenü">
-                    <Icon data={open ? faXmark : faBars} class="w-8 h-8" />
+                    {#if open}
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" viewBox="285 375 40 45" class="w-8 h-8 stroke-secondary">
+                            <line x1="291.35" y1="411.34" x2="320.34" y2="382.35" />
+                            <line x1="291" y1="382" x2="320.69" y2="411.69" />
+                        </svg>
+                    {:else}
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" viewBox="275 380 60 35" class="w-8 h-8 stroke-secondary">
+                            <path d="M281,387h48M281,396h48M281,405h48"  />
+                        </svg>
+                    {/if}
                 </button>
             </div>
             <div class="w-full {open ? "h-auto" : "h-0"} text-primary bg-secondary overflow-hidden">
@@ -85,6 +95,8 @@
                     <button onclick={(): Promise<void> => sendTo("/imprint")} class="w-full h-auto text-xl font-semibold text-left cursor-pointer px-2 py-1 hover:underline hover:opacity-75 active:scale-95">IMPRESSUM</button>
                     <hr class="border" />
                     <button onclick={(): Promise<void> => sendTo("/privacy")} class="w-full h-auto text-xl font-semibold text-left cursor-pointer px-2 py-1 hover:underline hover:opacity-75 active:scale-95">DATENSCHUTZ</button>
+                    <hr class="border" />
+                    <button onclick={(): Promise<void> => sendTo("/sources")} class="w-full h-auto text-xl font-semibold text-left cursor-pointer px-2 py-1 hover:underline hover:opacity-75 active:scale-95">BILD UND QUELLENNACHWEISE</button>
                     {#if isRunning()}
                         <hr class="border" />
                         <button onclick={(): void => stopModal.openModal()} class="w-full h-auto text-xl font-semibold text-left cursor-pointer px-2 py-1 hover:underline hover:opacity-75 active:scale-95">SPIEL BEENDEN</button>
@@ -94,7 +106,7 @@
         </header>
         <PageTransition>
             <div class="w-full h-full text-primary bg-secondary grid grid-cols-1 grid-rows-[1fr_auto]">
-                <main class="w-full h-full {(new RegExp("\/(s|p)+\/[0-9]+[0-9]*\/")).test(page.url.pathname) ? "text-secondary bg-primary" : "text-primary bg-secondary"} p-4 {open ? "hidden" : ""}">
+                <main class="w-full h-full {(new RegExp("#\\/(s|p)+\\/[0-9]+[0-9]*")).test(page.url.hash) ? "text-secondary bg-primary" : "text-primary bg-secondary"} p-4 {open ? "hidden" : ""}">
                     {@render children()}
                 </main>
                 <footer class="w-full h-auto py-1 text-secondary bg-primary grid grid-cols-1 gap-2 px-2 border-t-2">

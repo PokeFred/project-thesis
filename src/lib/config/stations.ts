@@ -81,7 +81,7 @@ const _stations: _Station[] = [
         id: 2,
         tag: "Station 02",
         stitle: "Westenhellweg 1",
-        title: "Vom Handelsweg zur Einkaufsstraße - der Hellweg und seine Geschäfte",
+        title: "Vom Handelsweg zur Einkaufsstraße – der Hellweg und seine Geschäfte",
         chapters: "02",
         puzzles: [20, 21, 22, 23, 24]
     },
@@ -121,7 +121,7 @@ const _stations: _Station[] = [
         id: 7,
         tag: "Station 07",
         stitle: "Kampstraße",
-        title: "Selbstbedienung und Supermärkte - eine neue Form des Einkaufens",
+        title: "Selbstbedienung und Supermärkte – eine neue Form des Einkaufens",
         chapters: "07",
         puzzles: [70, 71, 72]
     },
@@ -129,7 +129,7 @@ const _stations: _Station[] = [
         id: 8,
         tag: "Station 08",
         stitle: "Westenhellweg 2",
-        title: "Zwischen Ausschluss und Wandel - Einkaufen in Dortmund im 20. Jahrhundert",
+        title: "Zwischen Ausschluss und Wandel – Einkaufen in Dortmund im 20. Jahrhundert",
         chapters: "08",
         puzzles: [80, 81, 82, 83]
     },
@@ -137,7 +137,7 @@ const _stations: _Station[] = [
         id: 9,
         tag: "Station 09",
         stitle: "Thier-Galerie",
-        title: "Von Einkaufszentren bis zum Online-Shopping - modernes Einkaufen im Wandel",
+        title: "Von Einkaufszentren bis zum Online-Shopping – modernes Einkaufen im Wandel",
         chapters: "09",
         puzzles: [90, 91, 92, 93]
     },
@@ -147,7 +147,7 @@ const _stations: _Station[] = [
         stitle: "Heute: Dein Einkauf",
         title: "Nachdenken über den eigenen Einkauf",
         chapters: "10",
-        puzzles: []
+        puzzles: [101, 102, 103, 104]
     }
 ]
 
